@@ -1,0 +1,96 @@
+{
+  "name": "terminal-error-sound",
+  "displayName": "Terminal Error Sound 🔊",
+  "description": "Plays a custom sound whenever a terminal command exits with a non-zero exit code.",
+  "version": "1.0.0",
+  "publisher": "sheydHD",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "terminal",
+    "sound",
+    "error",
+    "notification",
+    "alert"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sheydHD/terminal-error-sound"
+  },
+  "bugs": {
+    "url": "https://github.com/sheydHD/terminal-error-sound/issues"
+  },
+  "homepage": "https://sheydHD.github.io/terminal-error-sound",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "terminalErrorSound.toggle",
+        "title": "Toggle Terminal Error Sound",
+        "category": "Terminal Error Sound"
+      }
+    ],
+    "configuration": {
+      "title": "Terminal Error Sound",
+      "properties": {
+        "terminalErrorSound.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the terminal error sound notification."
+        },
+        "terminalErrorSound.soundFilePath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Absolute path to the sound file to play when a terminal error occurs.\n\n- **Windows**: `.wav` recommended (native); `.mp3` supported via WPF MediaPlayer.\n- **macOS**: any format supported by `afplay` (`.wav`, `.mp3`, `.aiff`, `.ogg`, etc.).\n- **Linux**: `.wav` / `.ogg` via `paplay`; fallback to `aplay` or `ffplay`.\n\nExample: `C:\\Users\\you\\sounds\\error.wav`"
+        },
+        "terminalErrorSound.minimumExitCode": {
+          "type": "integer",
+          "default": 1,
+          "minimum": 1,
+          "markdownDescription": "Minimum exit code that triggers the sound. Defaults to `1` (any non-zero exit)."
+        },
+        "terminalErrorSound.volume": {
+          "type": "number",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Playback volume (0.0 – 1.0). Effective on macOS (afplay) and Linux (paplay). Ignored on Windows."
+        },
+        "terminalErrorSound.fallbackOnTerminalClose": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Also trigger sound when a terminal **closes** with a non-zero exit code.\n\nUseful as a fallback when [Shell Integration](https://code.visualstudio.com/docs/terminal/shell-integration) is unavailable."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc --watch -p ./",
+    "lint": "eslint src --ext .ts",
+    "test": "node ./out/test/runTests.js",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.93.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.0.0",
+    "eslint": "^8.57.0",
+    "glob": "^11.1.0",
+    "mocha": "^10.8.2",
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,14 @@
+title: Terminal Error Sound 🔊
+description: >-
+  A VS Code extension that plays an audible alert whenever a terminal
+  command exits with a non-zero exit code.
+theme: minima
+url: "https://sheydHD.github.io"
+baseurl: "/terminal-error-sound"
+author:
+  name: Antoni Dudij
+  email: antonidudij@gmail.com
+github_username: sheydHD
+show_excerpts: true
+minima:
+  skin: dark
