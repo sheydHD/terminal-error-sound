@@ -11,25 +11,16 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 jobs:
-  build:
-    name: Build docs site
+  deploy:
+    name: Build & deploy docs site
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      # Convert README.md → index.html using Jekyll's default minima theme.
-      # No _config.yml is required – GitHub Pages detects the repo automatically.
       - name: Create Jekyll config
         run: |
           cat > _config.yml <<'EOF'
@@ -49,31 +40,17 @@ jobs:
             skin: dark
           EOF
 
-      - name: Copy README as index
-        run: cp README.md index.md
-
-      - name: Add Jekyll front-matter to index
+      - name: Prepare index page from README
         run: |
-          printf -- '---\nlayout: home\ntitle: Home\n---\n\n' | cat - index.md > /tmp/index.md
-          mv /tmp/index.md index.md
+          printf -- '---\nlayout: home\ntitle: Home\n---\n\n' | cat - README.md > index.md
 
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
+      # peaceiris/actions-gh-pages pushes the built site to the gh-pages branch.
+      # This works on first run without any manual Pages setup in repo settings.
+      # GitHub automatically serves the gh-pages branch at the Pages URL.
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          source: ./
-          destination: ./_site
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          exclude_assets: '.github,node_modules,out,src,.vscode,.vscode-test,*.vsix,package-lock.json,tsconfig.json,.eslintrc.json,.gitignore,.vscodeignore'
+          enable_jekyll: true
