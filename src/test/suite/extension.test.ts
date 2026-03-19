@@ -9,7 +9,7 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 
 // Keep in sync with `publisher` + `name` in package.json.
-const EXTENSION_ID = 'local.terminal-error-sound';
+const EXTENSION_ID = 'sheydHD.terminal-error-sound';
 const TOGGLE_COMMAND = 'terminalErrorSound.toggle';
 
 suite('Extension – activation', () => {

@@ -21,7 +21,15 @@ async function main(): Promise<void> {
       extensionDevelopmentPath,
       extensionTestsPath,
       // Prevent other installed extensions from interfering with test results.
-      launchArgs: ['--disable-extensions'],
+      // --no-sandbox and --disable-gpu are required for headless CI environments
+      // (GitHub Actions runners lack the kernel namespacing that Electron's
+      // sandbox requires, and there is no real GPU available).
+      launchArgs: [
+        '--disable-extensions',
+        '--no-sandbox',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+      ],
     });
   } catch (err) {
     // eslint-disable-next-line no-console

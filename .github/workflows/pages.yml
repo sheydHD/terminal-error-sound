@@ -14,6 +14,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  administration: write
 
 jobs:
   build:
@@ -25,6 +26,8 @@ jobs:
 
       - name: Set up Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       # Convert README.md → index.html using Jekyll's default minima theme.
       # No _config.yml is required – GitHub Pages detects the repo automatically.
