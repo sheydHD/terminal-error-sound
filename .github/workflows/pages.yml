@@ -1,0 +1,77 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Allow one concurrent deployment; cancel in-progress runs on new push.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build docs site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Pages
+        uses: actions/configure-pages@v5
+
+      # Convert README.md → index.html using Jekyll's default minima theme.
+      # No _config.yml is required – GitHub Pages detects the repo automatically.
+      - name: Create Jekyll config
+        run: |
+          cat > _config.yml <<'EOF'
+          title: Terminal Error Sound 🔊
+          description: >-
+            A VS Code extension that plays an audible alert whenever a terminal
+            command exits with a non-zero exit code.
+          theme: minima
+          url: "https://sheydHD.github.io"
+          baseurl: "/terminal-error-sound"
+          author:
+            name: Antoni Dudij
+            email: antonidudij@gmail.com
+          github_username: sheydHD
+          show_excerpts: true
+          minima:
+            skin: dark
+          EOF
+
+      - name: Copy README as index
+        run: cp README.md index.md
+
+      - name: Add Jekyll front-matter to index
+        run: |
+          printf -- '---\nlayout: home\ntitle: Home\n---\n\n' | cat - index.md > /tmp/index.md
+          mv /tmp/index.md index.md
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

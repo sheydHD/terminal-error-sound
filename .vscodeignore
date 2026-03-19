@@ -1,0 +1,9 @@
+.vscode/**
+src/**
+.gitignore
+.eslintrc.json
+tsconfig.json
+node_modules/**
+out/test/**
+*.vsix
+# sound/ is intentionally NOT excluded — it ships with the extension

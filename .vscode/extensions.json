@@ -1,0 +1,11 @@
+{
+  // Extensions recommended for contributors working on this project.
+  "recommendations": [
+    // TypeScript / ESLint linting in the editor.
+    "dbaeumer.vscode-eslint",
+    // Code formatting.
+    "esbenp.prettier-vscode",
+    // First-class support for running @vscode/test-electron tests in VS Code.
+    "ms-vscode.extension-test-runner"
+  ]
+}

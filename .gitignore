@@ -1,0 +1,7 @@
+out/
+node_modules/
+*.vsix
+.vscode-test/
+# OS artefacts
+.DS_Store
+Thumbs.db
